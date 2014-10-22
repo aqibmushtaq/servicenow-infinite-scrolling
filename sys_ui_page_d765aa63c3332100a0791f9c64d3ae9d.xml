@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<unload unload_date="2014-10-22 20:55:00">
+<unload unload_date="2014-10-22 21:01:21">
 <sys_ui_page action="INSERT_OR_UPDATE">
 <category>general</category>
 <client_script><![CDATA[var is = new InfiniteScrolling();
+document.observe("dom:loaded", function() {
+	is.getNext(addIncidents);
+});
+
 $("load-more").observe("click", function() {
-	is.getNext(function(data) {
-		var incidents = $("incidents");
-		if (data.length == 0) {
-			$("load-more").update("No more");
-			$("load-more").setAttribute("disabled", "true");
-		}
-		
-		for (var i = 0; i < data.length; i++) {
-			var elem = new Element("tr");
-			var number = new Element("td");
-			var shortDescription = new Element("td");
-			number.insert(data[i].number);
-			shortDescription.insert(data[i].short_description);
-			elem.insert(number);
-			elem.insert(shortDescription);
-			incidents.insert(elem);
-		}
-	});
-});]]></client_script>
+	is.getNext(addIncidents);
+});
+
+function addIncidents(data) {
+	var incidents = $("incidents");
+	if (data.length == 0) {
+		$("load-more").update("No more");
+		$("load-more").setAttribute("disabled", "true");
+	}
+	
+	for (var i = 0; i < data.length; i++) {
+		var elem = new Element("tr");
+		var number = new Element("td");
+		var shortDescription = new Element("td");
+		number.insert(data[i].number);
+		shortDescription.insert(data[i].short_description);
+		elem.insert(number);
+		elem.insert(shortDescription);
+		incidents.insert(elem);
+	}
+}]]></client_script>
 <description/>
 <endpoint/>
 <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
@@ -43,7 +49,7 @@ $("load-more").observe("click", function() {
 <sys_created_on>2014-10-22 20:10:52</sys_created_on>
 <sys_customer_update>false</sys_customer_update>
 <sys_id>d765aa63c3332100a0791f9c64d3ae9d</sys_id>
-<sys_mod_count>5</sys_mod_count>
+<sys_mod_count>6</sys_mod_count>
 <sys_name>recent_incident_list</sys_name>
 <sys_package display_value="Global">global</sys_package>
 <sys_policy/>
@@ -51,6 +57,6 @@ $("load-more").observe("click", function() {
 <sys_scope display_value="Global">global</sys_scope>
 <sys_update_name>sys_ui_page_d765aa63c3332100a0791f9c64d3ae9d</sys_update_name>
 <sys_updated_by>admin</sys_updated_by>
-<sys_updated_on>2014-10-22 20:26:22</sys_updated_on>
+<sys_updated_on>2014-10-22 21:01:01</sys_updated_on>
 </sys_ui_page>
 </unload>
