@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<unload unload_date="2014-10-22 20:54:38">
+<sys_script_include action="INSERT_OR_UPDATE">
+<access>package_private</access>
+<active>true</active>
+<api_name>global.InfiniteScrolling</api_name>
+<client_callable>true</client_callable>
+<description/>
+<name>InfiniteScrolling</name>
+<script><![CDATA[var InfiniteScrolling = Class.create();
+
+InfiniteScrolling.RESULTS_PER_PAGE = 5;
+InfiniteScrolling.prototype = Object.extendsObject(AbstractAjaxProcessor, {
+	
+	getMostRecentIncidents: function () {
+		var page = this.getParameter("sysparm_page");
+		var startRow = page * InfiniteScrolling.RESULTS_PER_PAGE;
+		
+		gs.log("start row: " + startRow);
+		
+		var incGr = new GlideRecord("incident");
+		incGr.orderByDesc("sys_created_on");
+		incGr.query();
+		while(startRow-- >0)
+			incGr.next();
+		
+		var result = [];
+		for(var i = 0; i < InfiniteScrolling.RESULTS_PER_PAGE && incGr.next(); i++) {
+			var inc = {};
+			inc.number = incGr.number+"";
+			inc.short_description = incGr.short_description+"";
+			result.push(inc);
+		}
+		
+		return new JSON().encode(result);
+	},
+	
+	type: "InfiniteScrolling"
+});]]></script>
+<sys_class_name>sys_script_include</sys_class_name>
+<sys_created_by>admin</sys_created_by>
+<sys_created_on>2014-10-22 19:47:16</sys_created_on>
+<sys_customer_update>false</sys_customer_update>
+<sys_id>88a1a663c3332100a0791f9c64d3ae1f</sys_id>
+<sys_mod_count>3</sys_mod_count>
+<sys_name>InfiniteScrolling</sys_name>
+<sys_package display_value="Global">global</sys_package>
+<sys_policy>read</sys_policy>
+<sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+<sys_scope display_value="Global">global</sys_scope>
+<sys_update_name>sys_script_include_88a1a663c3332100a0791f9c64d3ae1f</sys_update_name>
+<sys_updated_by>admin</sys_updated_by>
+<sys_updated_on>2014-10-22 20:20:52</sys_updated_on>
+</sys_script_include>
+</unload>
